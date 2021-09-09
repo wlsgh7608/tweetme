@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+
+{% block head_title %}
+this is amazing
+{% endblock head_title %}
+
+
+
+{% block content %}
+<div class='row text-center'>
+    <div class='col'>
+        <h1>Welcome to Tweetme </h1>
+    </div>
+</div>
+
+
+
+
+
+
+<div class = 'row mb-3' >
+    <div class = 'col-md-4 mx-auto col-10'>
+        <form class = 'form' id = 'tweet-create-form' method = 'POST' action ='/create-tweet'>
+            {% csrf_token %}
+            <input type = 'hidden' value = '/' name = 'next' />
+            <textarea required = 'required' class ='form-control' name = 'content' placeholder="input comments " ></textarea>
+            <button type = 'submit' class ='btn btn-primary'>Tweet</button>
+        </form>
+    </div>
+</div>
+
+<div class = 'row' id ='tweets' >
+    Loading
+</div>
+
+
+
+
+<script>
+
+    // submit 눌렀을떄 event
+    function handleTweetCreateFormDidSubmit(event){
+        event.preventDefault()
+        const myForm = event.target
+        const myFormData = new FormData(myForm) //html
+        const url = myForm.getAttribute("action")
+        const method = myForm.getAttribute("method")
+        const xhr = new XMLHttpRequest()
+        const responseType = 'json'
+      
+
+        xhr.responseType = responseType
+
+        xhr.open(method,url)
+
+        //set up ajax method
+        xhr.setRequestHeader("HTTP_X_REQUESTED_WITH","XMLHttpRequest")
+        xhr.setRequestHeader("X-Requested-With","XMLHttpRequest")
+
+        xhr.onload = function () {
+            if (xhr.status ===201){
+                const newTweetJson = xhr.response
+                const newTweetElement = formatTweetElement(newTweetJson)
+                
+                // 기존 html에 추가 
+                const ogHtml = tweetsContainerElement.innerHTML
+                tweetsContainerElement.innerHTML  = newTweetElement+ogHtml
+
+                myForm.reset()
+               
+            }
+        } 
+        xhr.send(myFormData)
+    }
+    
+
+    const tweetsContainerElement = document.getElementById('tweets') // get an html element 
+
+
+    const tweetCreateFormEl = document.getElementById('tweet-create-form')
+    tweetCreateFormEl.addEventListener('submit', handleTweetCreateFormDidSubmit) 
+    
+    
+
+    function loadTweets(tweetsElement){
+        const xhr = new XMLHttpRequest()
+        const method = 'GET'
+        const url = "/tweets"
+        const responseType = 'json'
+      
+
+        xhr.responseType = responseType
+        xhr.open(method, url)
+        xhr.onload = function () {
+            const serverResponse = xhr.response
+            const listItems = serverResponse.response //array
+            var finalTweetStr = ""
+            var i;
+            
+            for (i = 0; i < listItems.length; i++) {
+            
+                var tweetObj = listItems[i]
+                var currentItem = formatTweetElement(tweetObj)
+                finalTweetStr += currentItem
+            }
+            tweetsElement.innerHTML = finalTweetStr
+        }
+        xhr.send()
+
+
+    }
+    loadTweets(tweetsContainerElement )
+   
+
+
+    // Likes Count
+    function handleDidLike(tweet_id, currentCount){
+
+        console.log(tweet_id,currentCount)
+        currentCount++
+        return currentCount
+
+    }
+
+    // 좋아요 버튼 & 좋아요 수
+    function LikeBtn(tweet){
+        return "<button class = 'btn btn-primary btn-sm' onclick = handleDidLike("+
+        tweet.id+","+tweet.likes+ ") >"+ tweet.Likes +"Likes</button>"
+    }
+
+    function formatTweetElement(tweet){
+        var formattedTweet = "<div class = 'col-12 col-md-10 mx-auto border rounded py-3 mb-4 tweet' id ='tweet-" +tweet.id
+        +"'>"+"<p>" +tweet.content+
+            "</p><div class = 'btn-group'>"+LikeBtn(tweet)+
+            "</div></div>"
+        return formattedTweet
+    }
+
+       
+
+    
+
+</script>
+
+{% endblock content %}
