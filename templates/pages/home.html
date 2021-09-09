@@ -23,6 +23,9 @@ this is amazing
     <div class = 'col-md-4 mx-auto col-10'>
         <form class = 'form' id = 'tweet-create-form' method = 'POST' action ='/create-tweet'>
             {% csrf_token %}
+            <div class = 'd-none alert alert-danger' id = 'tweet-create-form-error'>
+
+            </div>
             <input type = 'hidden' value = '/' name = 'next' />
             <textarea required = 'required' class ='form-control' name = 'content' placeholder="input comments " ></textarea>
             <button type = 'submit' class ='btn btn-primary'>Tweet</button>
@@ -38,7 +41,22 @@ this is amazing
 
 
 <script>
+    function handleTweetFormError(msg,display){
+        var myErrorDiv = document.getElementById('tweet-create-form-error')
 
+        if (display === true){
+            // show error
+            myErrorDiv.setAttribute('class','d-block alert alert-danger')
+            myErrorDiv.innerText = msg
+        }else{
+            // hide error
+            myErrorDiv.setAttribute('class','d-none alert alert-danger')
+            myErrorDiv.setAttribute('class','d-block alert alert-danger')
+            myErrorDiv.innerText = msg
+
+         
+        }
+    }
     // submit 눌렀을떄 event
     function handleTweetCreateFormDidSubmit(event){
         event.preventDefault()
@@ -60,23 +78,51 @@ this is amazing
 
         xhr.onload = function () {
             if (xhr.status ===201){
+                handleTweetFormError("success",false)
                 const newTweetJson = xhr.response
                 const newTweetElement = formatTweetElement(newTweetJson)
-                
                 // 기존 html에 추가 
                 const ogHtml = tweetsContainerElement.innerHTML
                 tweetsContainerElement.innerHTML  = newTweetElement+ogHtml
-
                 myForm.reset()
                
             }
-        } 
+            // server is closed
+            else if (xhr.status === 400){
+                const errorJSon = xhr.response
+                const contentError = errorJSon.content
+                console.log(errorJSon)
+                let contentErrorMsg;
+                if (contentError){
+                    contentErrorMsg = contentError[0]
+                    if(contentErrorMsg){
+                        handleTweetFormError(contentErrorMsg,true)
+                    }
+                    else{
+                        alert("An error occured. Please try again")
+                    }
+                }
+                else{
+                    alert("An error occured. Please try again")
+                }
+                console.log(contentErrorMsg)
+            }
+            // internal server error
+            else if (xhr.status ===500){
+                alert("There was a server error. Please try again later.")
+            }
+
+        }
+        // when server is closed
+        xhr.onerror = function(){
+            alert("An error occurred. Please try again later.")
+        }
         xhr.send(myFormData)
     }
     
 
     const tweetsContainerElement = document.getElementById('tweets') // get an html element 
-
+ 
 
     const tweetCreateFormEl = document.getElementById('tweet-create-form')
     tweetCreateFormEl.addEventListener('submit', handleTweetCreateFormDidSubmit) 
