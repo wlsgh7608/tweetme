@@ -124,16 +124,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+DEFAULT_RENDERER_CLASSES = [
+    'rest_framework.renderers.JSONRenderer',
+]
+
+
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES += [
+    'rest_framework.renderers.BrowsableAPIRenderer',
+]
+    
+
 STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     
     "DEFAULT_AUTHENTICATION_CLASSES":[
          'rest_framework.authentication.SessionAuthentication'
          ],
-    "DEFAULT_RENDERER_CLASSES":[
-        'rest_framework.renderers.JSONRenderer',
-        # 'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
+    "DEFAULT_RENDERER_CLASSES":DEFAULT_RENDERER_CLASSES
             
 }
 
