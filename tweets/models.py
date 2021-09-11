@@ -16,7 +16,6 @@ class Tweet(models.Model):
     # user가 삭제될 때 user가 쓴 tweet 모두 삭제(cascade)
     user = models.ForeignKey(User,  on_delete = models.CASCADE) # many users can many tweets
     likes = models.ManyToManyField(User,related_name='tweet_user',blank = True ,through = TweetLike)
-
     content  = models.TextField(blank = True, null = True)
     image = models. FileField(upload_to = 'images/', blank = True , null = True)
     timestamp = models.DateTimeField(auto_now_add = True)
