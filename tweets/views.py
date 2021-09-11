@@ -67,10 +67,9 @@ def tweet_action_view(request,*args,**kwargs):
     id is required
     Action optrions are : like, unlike, retweet
     """
-    serializer = TweetActionSerializer(request.POST)
+    serializer = TweetActionSerializer(data = request.data)
     if serializer.is_valid(raise_exception = True):
         data = serializer.validated_data
-        print("data is ",data)
         tweet_id = data.get("id")
         action = data.get("action")
         qs = Tweet.objects.filter(id = tweet_id)
@@ -79,12 +78,14 @@ def tweet_action_view(request,*args,**kwargs):
         obj = qs.first()
         if action =="like":
              obj.likes.add(request.user)
+             serializer = TweetSerializer(obj)
+             return Response(serializer.data,status = 200)
         elif action =="unlike":
             obj.likes.remove(request.user)
         elif action =="retweet":
             # this is to do
             pass
-    return Response({"mesasge":"Tweet removed"},status = 200)
+    return Response({},status = 200)
 
 def tweet_create_view_pure_django(request,*args,**kwargs):
     '''
@@ -104,8 +105,6 @@ def tweet_create_view_pure_django(request,*args,**kwargs):
         obj = form.save(commit = False)
         # do other form related logic
         obj.user = user # Annonmous user
-
-
         obj.save()
         if request.is_ajax():
             return JsonResponse(obj.serialize(),status = 201) # 201 == created item
