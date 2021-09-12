@@ -1,6 +1,25 @@
 import React, { useEffect,useState  } from 'react';
 import { loadTweets } from '../lookup';
 
+export function TweetsComponent(props){
+    const textAreaRef = React.createRef()
+    const handleSubmit = (event)=>{
+        event.preventDefault()
+        const newVal = textAreaRef.current.value
+        console.log(newVal)
+        textAreaRef.current.value = ''
+    }
+    return <div className ={props.className}>
+        <div className = 'col-12 mb-3'>
+         <form onSubmit ={handleSubmit}>
+        <textarea  ref = {textAreaRef} required = {true} className = 'form-control'></textarea>
+        <button type = 'submit' className = 'btn btn-primary my-3'>Tweet</button>
+    </form>
+    </div>
+    <TweetsList></TweetsList>
+    </div>
+}
+
 export function TweetsList(props) {
     const [tweets, setTweets] = useState([{ content: 123 }])
 
@@ -31,7 +50,7 @@ export function ActionBtn(props){
     const [userLike,setUserLike] = useState(tweet.userLike === true? true :  false)
     const className  = props.className? props.className : 'btn btn-primary btn-sm'
     const actionDisplay = action.display? action.display : 'Action'
-    
+
     const handleClick = (event)=>{
         event.preventDefault()
         if (action.type ==='like'){
@@ -53,6 +72,7 @@ export function ActionBtn(props){
  export function Tweet(props){
     const {tweet} = props
     const className  = props.className? props.className : 'col-10 mx-auto col-md-6'
+    
     return <div className = {className}>
       <p>{tweet.id} -  {tweet.content}</p>
       <div className = 'btn btn-broup'>
