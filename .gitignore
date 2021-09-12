@@ -1,0 +1,13 @@
+node_modules/
+#local project items
+parse.py
+
+
+# Byte-compiled / optimized /DLL files
+__pycache__/
+*.py[cod]
+*%py.class
+
+
+# C extensions
+*.so
