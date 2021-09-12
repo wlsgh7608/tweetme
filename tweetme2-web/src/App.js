@@ -1,47 +1,31 @@
-import React,{useEffect,useState} from 'react';
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-
-function loadTweets(callback){
-  const xhr = new XMLHttpRequest()
-  const method = 'GET'
-  const url = "http://localhost:8000/api/tweets"
-  const responseType = 'json'
+import {TweetsList} from './tweets'
 
 
-  xhr.responseType = responseType
-  xhr.open(method, url)
-  xhr.onload = function () {
-    callback(xhr.response,xhr.status)
-  }
-  xhr.onerror = function(e){
-    console.log(e)
-    callback({"message":"The request was as error"},400)
-  }
-  xhr.send()
 
 
-}
+// function ReTweetBtn(tweet){
+//   return "<button class = 'btn btn-outline-success btn-sm' onclick = handleTweetActionBtn("+
+//   tweet.id+","+tweet.likes+ ",'retweet') > ReTweet</button>"
+// }
+
+// // 싫어요 
+// function UnLikeBtn(tweet){
+//   return "<button class = 'btn btn-outline-primary btn-sm' onclick = handleTweetActionBtn("+
+//   tweet.id+","+tweet.likes+ ",'unlike') > UnLike</button>"
+// }
+
+
+
+
+
+
+
 function App() {
-  const [tweets,setTweets] = useState([{content: 123}])
- 
   
- 
-  
-  useEffect(()=>{
-    // do my lookup
-    const myCallback = (response,status)=>{
-      console.log(response,status)
-      if (status===200){
-        setTweets(response)
-      }else{
-        alert("Thre was an error")
-      }
-  }
-  loadTweets(myCallback)
-}  ,[]
-)
 
   return (
     <div className="App">
@@ -50,11 +34,9 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <p>
-          {tweets.map((tweet,index)=> {
-            return <li>{tweet.content}</li>
-          })}
-        </p>
+        <div>
+          <TweetsList />
+        </div>
         <a
           className="App-link"
           href="https://reactjs.org"
