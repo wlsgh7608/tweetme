@@ -1,5 +1,15 @@
+# Option 1
+`npx create-react-app <your-app-name>`
+
+
+# Option 2
+`npm init react-app <your-app-name>`
+
+# Option 3
+`pacakge.json`:
+```
 {
-  "name": "tweetme2-web",
+  "name": "your-app-name",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -14,7 +24,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -35,3 +46,8 @@
     ]
   }
 }
+```
+
+
+Then `npm install`
+

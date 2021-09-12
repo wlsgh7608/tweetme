@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-az94-z$k_6^i&%9@olg!=kc3qrp*s-uci3*4cg%qmjqp@j2f0i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 TWEET_ACTION_OPTIONS = ['like','unlike','retweet']
-ALLOWED_HOSTS = ['127.0.0.1','.mydomain.com']
+ALLOWED_HOSTS = ['127.0.0.1','.mydomain.com','localhost']
 LOGIN_URL = "/login"
 MAX_TWEET_LENGTH = 240
 
@@ -43,13 +43,15 @@ INSTALLED_APPS = [
     'rest_framework',
     # internal
     'tweets',
+    "corsheaders",
 
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -123,6 +125,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
+
+CORS_ORIGIN_ALLOW_ALL = True # any website has acces to my api
+CORS_URLS_REGEX = r"^/api/.*$"
+
 
 DEFAULT_RENDERER_CLASSES = [
     'rest_framework.renderers.JSONRenderer',

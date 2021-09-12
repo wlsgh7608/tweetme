@@ -26,10 +26,6 @@ urlpatterns = [
     path('create-tweet', tweet_create_view),
     path('tweets/<int:tweet_id>',tweet_detail_view),
     path('tweets/',tweet_list_view),  
-    # path('api/tweets/action',tweet_action_view),  
-    # path('api/tweets/',tweet_delete_view),  
-
-
     path('api/tweets/',include('tweets.urls')) # tweet app rest api in tweets directory
 
  
