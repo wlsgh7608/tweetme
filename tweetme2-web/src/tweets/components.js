@@ -50,7 +50,7 @@ export function TweetsList(props) {
             }
         }
         loadTweets(myCallback)
-    }, [tweetsInit])
+    }, [])
     return tweets.map((item, index) => {
         return <Tweet tweet={item} className='my-5 py-5 border bg-white text-dark' key={`${index}- {tweet.id}`} />
     })
