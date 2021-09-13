@@ -7,21 +7,6 @@ import {TweetsComponent} from './tweets'
 
 
 
-// function ReTweetBtn(tweet){
-//   return "<button class = 'btn btn-outline-success btn-sm' onclick = handleTweetActionBtn("+
-//   tweet.id+","+tweet.likes+ ",'retweet') > ReTweet</button>"
-// }
-
-// // 싫어요 
-// function UnLikeBtn(tweet){
-//   return "<button class = 'btn btn-outline-primary btn-sm' onclick = handleTweetActionBtn("+
-//   tweet.id+","+tweet.likes+ ",'unlike') > UnLike</button>"
-// }
-
-
-
-
-
 
 
 function App() {
