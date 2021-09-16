@@ -20,20 +20,24 @@ def home_view(request,*args, **kwargs):
     return render(request,"pages/home.html",context = {},status=200 )
 
 
-
 @api_view(['POST']) # http method the client == POST
 # @authentication_classes([SessionAuthentication, MyCustomAuth])
 @permission_classes([IsAuthenticated]) # REST API course
 def tweet_create_view(request,*args,**kwargs):
-    serializer = TweetCreateSerializer(data = request.POST or None)
+    serializer = TweetCreateSerializer(data = request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user = request.user)
         return Response(serializer.data,status = 201)
+
+    
     return Response({},status= 400)
 
 @api_view(['GET'])
 def tweet_list_view(request,*args,**kwargs):
     qs = Tweet.objects.all()
+    username = request.GET.get('username') #?username = wlsgh
+    if username != None:
+        qs = qs.filter(user__username__iexact = username)
     serializer = TweetSerializer(qs , many = True)
     return Response(serializer.data)
 

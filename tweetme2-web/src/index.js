@@ -11,12 +11,17 @@ if(appEl){
   ReactDOM.render(<App></App>,appEl);
 }
 
+const e = React.createElement
 const tweetsEl = document.getElementById('tweetme-2')
 if(tweetsEl){
-  ReactDOM.render(<TweetsComponent></TweetsComponent>,tweetsEl);
+  console.log("whats",tweetsEl.dataset)
+  const MyComponent = e(TweetsComponent,tweetsEl.dataset )
+  // ReactDOM.render(<TweetsComponent username = {tweetsEl.dataset.username}></TweetsComponent>,tweetsEl);
+  ReactDOM.render(MyComponent,tweetsEl)
+
 }
 
-
+ 
 // ReactDOM.render(
 //   <React.StrictMode>
 //     <App />

@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-az94-z$k_6^i&%9@olg!=kc3qrp*s-uci3*4cg%qmjqp@j2f0i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 TWEET_ACTION_OPTIONS = ['like','unlike','retweet']
-ALLOWED_HOSTS = ['127.0.0.1','.mydomain.com','localhost']
+# ALLOWED_HOSTS = ['127.0.0.1','localhost']
+ALLOWED_HOSTS = ['*']
 LOGIN_URL = "/login"
 MAX_TWEET_LENGTH = 240
 
@@ -128,17 +129,24 @@ USE_TZ = True
 
 CORS_ORIGIN_ALLOW_ALL = True # any website has acces to my api
 CORS_URLS_REGEX = r"^/api/.*$"
-
+# CORS_ALLOW_HEADERS = default_headers + ( 'HTTP_X_REQUESTED_WITH','X-CSRFToken', )
 
 DEFAULT_RENDERER_CLASSES = [
     'rest_framework.renderers.JSONRenderer',
 ]
 
+DEFAULT_AUTHENTICATION_CLASSES = [
+    'rest_framework.authentication.SessionAuthentication',
+]
 
 if DEBUG:
     DEFAULT_RENDERER_CLASSES += [
     'rest_framework.renderers.BrowsableAPIRenderer',
-]
+    ]
+    DEFAULT_AUTHENTICATION_CLASSES += [
+        'tweetme2.rest_api.dev.DevAuthentication',
+
+    ]
     
 
 STATIC_URL = '/static/'
@@ -146,12 +154,11 @@ STATICFILES_DIRS = [
    os.path.join(BASE_DIR,"static"),
 ]
 
+
 STATIC_ROOT = os.path.join(BASE_DIR,"static-root")
 REST_FRAMEWORK = {
     
-    "DEFAULT_AUTHENTICATION_CLASSES":[
-         'rest_framework.authentication.SessionAuthentication'
-         ],
+    "DEFAULT_AUTHENTICATION_CLASSES":DEFAULT_AUTHENTICATION_CLASSES,
     "DEFAULT_RENDERER_CLASSES":DEFAULT_RENDERER_CLASSES
             
 }
